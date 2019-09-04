@@ -35,9 +35,41 @@ functions:
     layers:
       - {Ref: CommonLibsLambdaLayer}
     events:
-    - http:
-        path: author
-        method: post
+      - http:
+          path: author
+          method: post
+  getAllAuthors:
+    handler: handler.getAllAuthors
+    layers:
+      - {Ref: CommonLibsLambdaLayer}
+    events:
+      - http:
+          path: author
+          method: get
+  getAuthorById:
+    handler: handler.getAuthorById
+    layers:
+      - {Ref: CommonLibsLambdaLayer}
+    events:
+      - http:
+          path: author/{authorId}
+          method: get
+  updateAuthor:
+    handler: handler.updateAuthor
+    layers:
+      - {Ref: CommonLibsLambdaLayer}
+    events:
+      - http:
+          path: author/{authorId}
+          method: put
+  deleteAuthor:
+    handler: handler.deleteAuthor
+    layers:
+      - {Ref: CommonLibsLambdaLayer}
+    events:
+      - http:
+          path: author/{authorId}
+          method: delete
 
 resources:
   Resources:
