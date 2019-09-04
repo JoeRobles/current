@@ -131,7 +131,7 @@ module.exports.updateAuthor = async (event, context, callback) => {
       ExpressionAttributeValues[`:${k}`] = Item[k];
     });
 
-    ExpressionAttributeValues['authorId'] = authorId;
+    ExpressionAttributeValues[':authorId'] = authorId;
 
     const params = {
       TableName,
@@ -140,7 +140,7 @@ module.exports.updateAuthor = async (event, context, callback) => {
       },
       ConditionExpression: 'authorId = :authorId',
       UpdateExpression: 'set ' + UpdateExpression.join(', '),
-      ExpressionAttributeValues: ExpressionAttributeValues,
+      ExpressionAttributeValues,
       ReturnValues: 'UPDATED_NEW',
     };
 
