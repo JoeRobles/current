@@ -3,6 +3,7 @@ const AWS = require('aws-sdk');
 const db = new AWS.DynamoDB.DocumentClient({apiVersion: '2012-08-10'});
 const TableName = process.env.POSTS_TABLE;
 const uniqid = require('uniqid');
+const keys = require('lodash');
 
 const response = (statusCode, message) => ({
   statusCode,
