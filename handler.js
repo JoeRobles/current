@@ -11,29 +11,31 @@ const response = (statusCode, message) => ({
 
 module.exports.createAuthor = async (event, context, callback) => {
   if (event && event.body) {
-    const reqBody = JSON.parse(event.body);
-
+    const reqBody = JSON.parse(event.body),
+    authorName = reqBody.authorName,
+    birthDate = reqBody.birthDate,
+    email = reqBody.email;
     if (
-      !reqBody.authorName ||
-      reqBody.authorName.trim() === '' ||
-      !reqBody.birthDate ||
-      reqBody.birthDate.trim() === '' ||
-      !reqBody.email ||
-      reqBody.email.trim() === ''
+      !authorName ||
+      authorName.trim() === '' ||
+      !birthDate ||
+      birthDate.trim() === '' ||
+      !email ||
+      email.trim() === ''
     ) {
       return callback(
         null,
         response(400, {
-          error: 'Post must have a authorName a birthDate and an email, and they must not be empty'
+          error: 'Post must have an authorName a birthDate and an email, and they must not be empty'
         })
       );
     }
 
     const Item = {
       authorId: uniqid(),
-      authorName: reqBody.authorName,
-      birthDate: reqBody.birthDate,
-      email: reqBody.email,
+      authorName,
+      birthDate,
+      email,
       createdAt: new Date().toISOString(),
     };
 
@@ -64,5 +66,42 @@ module.exports.getAllAuthors = async (event, context, callback) => {
   .then(res => {
     callback(null, response(200, res.Items))
   })
-  .catch(err => calback(null, response(err.statusCode, err)));
+  .catch(err => callback(null, response(err.statusCode, err)));
+};
+
+module.exports.getAuthorById = async (event, context, callback) => {
+  if (event && event.body) {
+    const reqBody = JSON.parse(event.body),
+    authorId = reqBody.authorId;
+
+    if (
+      !authorId ||
+      authorId.trim() === '' ||
+    ) {
+      return callback(
+        null,
+        response(400, {
+            error: 'Get must have an authorId, and must not be empty'
+        })
+      );
+    }
+    return db.get({
+      TableName,
+      Key: {
+        authorId
+      }
+    })
+    .promise()
+    .then(res => {
+      callback(null, response(200, res.Items))
+    })
+    .catch(err => callback(null, response(err.statusCode, err)));
+  } else {
+    return callback(
+      null,
+      response(400, {
+          error: 'Get must have a non empty body'
+      })
+    );
+  }
 };
