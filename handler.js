@@ -76,7 +76,7 @@ module.exports.getAuthorById = async (event, context, callback) => {
 
     if (
       !authorId ||
-      authorId.trim() === '' ||
+      authorId.trim() === ''
     ) {
       return callback(
         null,
