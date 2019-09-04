@@ -134,7 +134,7 @@ module.exports.updateAuthor = async (event, context, callback) => {
     ExpressionAttributeValues['authorId'] = authorId;
 
     const params = {
-      TableName: this.TableName,
+      TableName,
       Key: {
         authorId
       },
