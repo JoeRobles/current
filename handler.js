@@ -1,7 +1,7 @@
 'use strict';
 const AWS = require('aws-sdk');
 const db = new AWS.DynamoDB.DocumentClient({apiVersion: '2012-08-10'});
-const postsTable = process.env.POSTS_TABLE;
+const TableName = process.env.POSTS_TABLE;
 const uniqid = require('uniqid');
 
 const response = (statusCode, message) => ({
@@ -22,14 +22,14 @@ module.exports.createAuthor = async (event, context, callback) => {
       reqBody.email.trim() === ''
     ) {
       return callback(
-          null,
-          response(400, {
+        null,
+        response(400, {
           error: 'Post must have a authorName a birthDate and an email, and they must not be empty'
         })
       );
     }
 
-    const post = {
+    const Item = {
       authorId: uniqid(),
       authorName: reqBody.authorName,
       birthDate: reqBody.birthDate,
@@ -38,12 +38,12 @@ module.exports.createAuthor = async (event, context, callback) => {
     };
 
     return db.put({
-      TableName: postsTable,
-      Item: post
+      TableName,
+      Item
     })
     .promise()
     .then(() => {
-      callback(null, response(201, post));
+      callback(null, response(201, Item));
     })
     .catch(err => response(null, response(err.statusCode, err)));
   } else {
@@ -54,4 +54,15 @@ module.exports.createAuthor = async (event, context, callback) => {
       })
     );
   }
+};
+
+module.exports.getAllAuthors = async (event, context, callback) => {
+  return db.scan({
+    TableName
+  })
+  .promise()
+  .then(res => {
+    callback(null, response(200, res.Items))
+  })
+  .catch(err => calback(null, response(err.statusCode, err)));
 };
