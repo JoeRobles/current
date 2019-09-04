@@ -70,8 +70,8 @@ module.exports.getAllAuthors = async (event, context, callback) => {
 };
 
 module.exports.getAuthorById = async (event, context, callback) => {
-  if (event && event.params) {
-    const reqParams = JSON.parse(event.params),
+  if (event && event.pathParameters) {
+    const reqParams = event.pathParameters,
     authorId = reqParams.authorId;
 
     if (
@@ -100,7 +100,7 @@ module.exports.getAuthorById = async (event, context, callback) => {
     return callback(
       null,
       response(400, {
-          error: 'Get must have a non empty body'
+          error: 'Get must have a non empty authorId parameter'
       })
     );
   }
