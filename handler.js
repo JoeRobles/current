@@ -93,7 +93,7 @@ module.exports.getAuthorById = async (event, context, callback) => {
     })
     .promise()
     .then(res => {
-      callback(null, response(200, res.Items))
+      callback(null, response(200, res.Item))
     })
     .catch(err => callback(null, response(err.statusCode, err)));
   } else {
