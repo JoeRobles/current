@@ -70,9 +70,9 @@ module.exports.getAllAuthors = async (event, context, callback) => {
 };
 
 module.exports.getAuthorById = async (event, context, callback) => {
-  if (event && event.body) {
-    const reqBody = JSON.parse(event.body),
-    authorId = reqBody.authorId;
+  if (event && event.params) {
+    const reqParams = JSON.parse(event.params),
+    authorId = reqParams.authorId;
 
     if (
       !authorId ||
