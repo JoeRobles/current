@@ -71,6 +71,46 @@ functions:
       - http:
           path: author/{authorId}
           method: delete
+  createPublication:
+    handler: handler.createAuthor
+    layers:
+      - {Ref: CommonLibsLambdaLayer}
+    events:
+      - http:
+          path: author
+          method: post
+  getAllPublications:
+    handler: handler.getAllPublications
+    layers:
+      - {Ref: CommonLibsLambdaLayer}
+    events:
+      - http:
+          path: publication
+          method: get
+  getPublicationById:
+    handler: handler.getPublicationById
+    layers:
+      - {Ref: CommonLibsLambdaLayer}
+    events:
+      - http:
+          path: publication/{publicationId}
+          method: get
+  updatePublication:
+    handler: handler.updatePublication
+    layers:
+      - {Ref: CommonLibsLambdaLayer}
+    events:
+      - http:
+          path: publication/{publicationId}
+          method: put
+  deletePublication:
+    handler: handler.deletePublication
+    layers:
+      - {Ref: CommonLibsLambdaLayer}
+    events:
+      - http:
+          path: publication/{publicationId}
+          method: delete
 
 resources:
   Resources:
@@ -87,3 +127,16 @@ resources:
           ReadCapacityUnits: 1
           WriteCapacityUnits: 1
         TableName: ${self:custom.settings.AUTHOR_TABLE}
+    PublicationTable:
+      Type: AWS::DynamoDB::Table
+      Properties:
+        AttributeDefinitions:
+          - AttributeName: "publicationId"
+            AttributeType: "S"
+        KeySchema:
+          - AttributeName: "publicationId"
+            KeyType: "HASH"
+        ProvisionedThroughput:
+          ReadCapacityUnits: 1
+          WriteCapacityUnits: 1
+        TableName: ${self:custom.settings.PUBLICATION_TABLE}
