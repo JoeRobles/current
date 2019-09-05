@@ -4,7 +4,8 @@ service: current
 
 custom:
   settings:
-    POSTS_TABLE: current_Author
+    AUTHOR_TABLE: current_Author
+    PUBLICATION_TABLE: current_Publication
 
 layers:
   commonLibs:
@@ -27,7 +28,7 @@ provider:
         - dynamodb:UpdateItem
         - dynamodb:DeleteItem
       Resource:
-        - "arn:aws:dynamodb:${self:provider.region}:*:table/${self:custom.settings.POSTS_TABLE}"
+        - "arn:aws:dynamodb:${self:provider.region}:*:table/${self:custom.settings.AUTHOR_TABLE}"
 
 functions:
   createAuthor:
@@ -73,7 +74,7 @@ functions:
 
 resources:
   Resources:
-    PostsTable:
+    AuthorTable:
       Type: AWS::DynamoDB::Table
       Properties:
         AttributeDefinitions:
@@ -85,9 +86,4 @@ resources:
         ProvisionedThroughput:
           ReadCapacityUnits: 1
           WriteCapacityUnits: 1
-        TableName: ${self:custom.settings.POSTS_TABLE}
-
-
-#package:
-#  exclude:
-#    - node_modules/**
+        TableName: ${self:custom.settings.AUTHOR_TABLE}

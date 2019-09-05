@@ -1,8 +1,9 @@
 'use strict';
-const AWS = require('aws-sdk');
-const db = new AWS.DynamoDB.DocumentClient({apiVersion: '2012-08-10'});
-const TableName = process.env.POSTS_TABLE;
-const uniqid = require('uniqid');
+const AWS = require('aws-sdk'),
+db = new AWS.DynamoDB.DocumentClient({apiVersion: '2012-08-10'}),
+AuthorTableName = process.env.AUTHOR_TABLE,
+PublicationTableName = process.env.PUBLICATION_TABLE,
+uniqid = require('uniqid');
 
 const response = (statusCode, message) => ({
   statusCode,
@@ -23,7 +24,7 @@ module.exports.createAuthor = async (event, context, callback) => {
       return callback(
         null,
         response(400, {
-          error: 'Post must have an authorName a birthDate and an email, and they must not be empty'
+          error: 'Put must have an authorName, a birthDate and an email, and they must not be empty'
         })
       );
     }
@@ -36,7 +37,7 @@ module.exports.createAuthor = async (event, context, callback) => {
       createdAt: new Date().toISOString(),
     };
     const params = {
-      TableName,
+      TableName: AuthorTableName,
       Item
     };
 
@@ -50,7 +51,7 @@ module.exports.createAuthor = async (event, context, callback) => {
     return callback(
       null,
       response(400, {
-        error: 'Post must have a non empty body'
+        error: 'Put must have a non empty body'
       })
     );
   }
@@ -58,7 +59,7 @@ module.exports.createAuthor = async (event, context, callback) => {
 
 module.exports.getAllAuthors = async (event, context, callback) => {
   const params = {
-    TableName
+    TableName: AuthorTableName
   };
   return db.scan(params)
   .promise()
@@ -84,7 +85,7 @@ module.exports.getAuthorById = async (event, context, callback) => {
       );
     }
     const params = {
-      TableName,
+      TableName: AuthorTableName,
       Key: {
         authorId
       }
@@ -135,7 +136,7 @@ module.exports.updateAuthor = async (event, context, callback) => {
     ExpressionAttributeValues[':authorId'] = authorId;
 
     const params = {
-      TableName,
+      TableName: AuthorTableName,
       Key: {
         authorId
       },
@@ -177,7 +178,7 @@ module.exports.deleteAuthor = async (event, context, callback) => {
       );
     }
     const params = {
-      TableName,
+      TableName: AuthorTableName,
       Key: {
         authorId
       }
