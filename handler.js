@@ -38,11 +38,12 @@ module.exports.createAuthor = async (event, context, callback) => {
       email,
       createdAt: new Date().toISOString(),
     };
-
-    return db.put({
+    const params = {
       TableName,
       Item
-    })
+    };
+
+    return db.put(params)
     .promise()
     .then(() => {
       callback(null, response(201, Item));
@@ -59,9 +60,10 @@ module.exports.createAuthor = async (event, context, callback) => {
 };
 
 module.exports.getAllAuthors = async (event, context, callback) => {
-  return db.scan({
+  const params = {
     TableName
-  })
+  };
+  return db.scan(params)
   .promise()
   .then(res => {
     callback(null, response(200, res.Items))
@@ -85,12 +87,14 @@ module.exports.getAuthorById = async (event, context, callback) => {
         })
       );
     }
-    return db.get({
+    const params = {
       TableName,
       Key: {
         authorId
       }
-    })
+    };
+
+    return db.get(params)
     .promise()
     .then(res => {
       callback(null, response(200, res.Item))
@@ -155,6 +159,45 @@ module.exports.updateAuthor = async (event, context, callback) => {
       response(400, {
           error: 'Update must have a non empty authorId parameter'
       })
+    );
+  }
+};
+
+module.exports.deleteAuthor = async (event, context, callback) => {
+  if (event && event.pathParameters) {
+    const reqParams = event.pathParameters,
+        authorId = reqParams.authorId;
+
+    if (
+        !authorId ||
+        authorId.trim() === ''
+    ) {
+      return callback(
+          null,
+          response(400, {
+            error: 'Delete must have an authorId, and must not be empty'
+          })
+      );
+    }
+    const params = {
+      TableName,
+      Key: {
+        authorId
+      }
+    };
+
+    return db.delete(params)
+        .promise()
+        .then(res => {
+          callback(null, response(200, res))
+        })
+        .catch(err => callback(null, response(err.statusCode, err)));
+  } else {
+    return callback(
+        null,
+        response(400, {
+          error: 'Delete must have a non empty authorId parameter'
+        })
     );
   }
 };
