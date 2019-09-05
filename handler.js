@@ -130,9 +130,13 @@ module.exports.updateAuthor = async (event, context, callback) => {
     }
     let UpdateExpression = [], ExpressionAttributeValues = [];
     Object.keys(Item).forEach(k => {
-      UpdateExpression.push(`${k} = :${k}`);
-      ExpressionAttributeValues[`:${k}`] = Item[k];
+      if (k !== 'updatedAt') {
+        UpdateExpression.push(`${k} = :${k}`);
+        ExpressionAttributeValues[`:${k}`] = Item[k];
+      }
     });
+    UpdateExpression.push('updatedAt = :updatedAt');
+    ExpressionAttributeValues[':updatedAt'] = new Date().toISOString();
 
     ExpressionAttributeValues[':authorId'] = authorId;
 
@@ -189,7 +193,7 @@ module.exports.deleteAuthor = async (event, context, callback) => {
     return db.delete(params)
         .promise()
         .then(res => {
-          callback(null, response(200, res))
+          callback(null, response(200, { message: 'Author deleted successfully' }))
         })
         .catch(err => callback(null, response(err.statusCode, err)));
   } else {
