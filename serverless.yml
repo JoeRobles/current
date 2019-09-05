@@ -4,8 +4,8 @@ service: current
 
 custom:
   settings:
-    AUTHOR_TABLE: current_Author
-    PUBLICATION_TABLE: current_Publication
+    AUTHOR_TABLE: curr_Author
+    PUBLICATION_TABLE: curr_Publication
 
 layers:
   commonLibs:
@@ -29,6 +29,7 @@ provider:
         - dynamodb:DeleteItem
       Resource:
         - "arn:aws:dynamodb:${self:provider.region}:*:table/${self:custom.settings.AUTHOR_TABLE}"
+        - "arn:aws:dynamodb:${self:provider.region}:*:table/${self:custom.settings.PUBLICATION_TABLE}"
 
 functions:
   createAuthor:
@@ -72,12 +73,12 @@ functions:
           path: author/{authorId}
           method: delete
   createPublication:
-    handler: handler.createAuthor
+    handler: handler.createPublication
     layers:
       - {Ref: CommonLibsLambdaLayer}
     events:
       - http:
-          path: author
+          path: publication
           method: post
   getAllPublications:
     handler: handler.getAllPublications
