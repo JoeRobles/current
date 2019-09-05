@@ -3,7 +3,6 @@ const AWS = require('aws-sdk');
 const db = new AWS.DynamoDB.DocumentClient({apiVersion: '2012-08-10'});
 const TableName = process.env.POSTS_TABLE;
 const uniqid = require('uniqid');
-const keys = require('lodash');
 
 const response = (statusCode, message) => ({
   statusCode,
@@ -126,7 +125,7 @@ module.exports.updateAuthor = async (event, context, callback) => {
       );
     }
     let UpdateExpression = [], ExpressionAttributeValues = [];
-    keys(Item).forEach((k) => {
+    Object.keys(Item).forEach(k => {
       UpdateExpression.push(`${k} = :${k}`);
       ExpressionAttributeValues[`:${k}`] = Item[k];
     });
@@ -147,7 +146,7 @@ module.exports.updateAuthor = async (event, context, callback) => {
     return db.update(params)
     .promise()
     .then(res => {
-      callback(null, response(200, res.Item))
+      callback(null, response(200, res.Attributes))
     })
     .catch(err => callback(null, response(err.statusCode, err)));
   } else {
