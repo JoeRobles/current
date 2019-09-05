@@ -211,7 +211,7 @@ module.exports.createPublication = async (event, context, callback) => {
         !publicationDate ||
         publicationDate.trim() === '' ||
         !authors ||
-        authors.length() > 0
+        authors.length === 0
     ) {
       return callback(
           null,
