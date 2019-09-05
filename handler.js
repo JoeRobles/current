@@ -11,10 +11,7 @@ const response = (statusCode, message) => ({
 
 module.exports.createAuthor = async (event, context, callback) => {
   if (event && event.body) {
-    const reqBody = JSON.parse(event.body),
-    authorName = reqBody.authorName,
-    birthDate = reqBody.birthDate,
-    email = reqBody.email;
+    const { authorName, birthDate, email } = JSON.parse(event.body);
     if (
       !authorName ||
       authorName.trim() === '' ||
@@ -73,8 +70,7 @@ module.exports.getAllAuthors = async (event, context, callback) => {
 
 module.exports.getAuthorById = async (event, context, callback) => {
   if (event && event.pathParameters) {
-    const reqParams = event.pathParameters,
-    authorId = reqParams.authorId;
+    const { authorId } = event.pathParameters;
 
     if (
       !authorId ||
@@ -112,10 +108,8 @@ module.exports.getAuthorById = async (event, context, callback) => {
 
 module.exports.updateAuthor = async (event, context, callback) => {
   if (event && event.pathParameters && event.body) {
-    const reqParams = event.pathParameters,
-    authorId = reqParams.authorId,
-    reqBody = JSON.parse(event.body),
-    Item = reqBody.Item;
+    const { authorId } = event.pathParameters,
+    { Item } = JSON.parse(event.body);
 
     if (
       !authorId ||
@@ -169,8 +163,7 @@ module.exports.updateAuthor = async (event, context, callback) => {
 
 module.exports.deleteAuthor = async (event, context, callback) => {
   if (event && event.pathParameters) {
-    const reqParams = event.pathParameters,
-        authorId = reqParams.authorId;
+    const { authorId } = event.pathParameters;
 
     if (
         !authorId ||
