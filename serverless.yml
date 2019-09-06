@@ -33,7 +33,7 @@ provider:
 
 functions:
   createAuthor:
-    handler: handler.createAuthor
+    handler: src/functions/author.create
     layers:
       - {Ref: CommonLibsLambdaLayer}
     events:
@@ -41,7 +41,7 @@ functions:
           path: author
           method: post
   getAllAuthors:
-    handler: handler.getAllAuthors
+    handler: src/functions/author.getAll
     layers:
       - {Ref: CommonLibsLambdaLayer}
     events:
@@ -49,7 +49,7 @@ functions:
           path: author
           method: get
   getAuthorById:
-    handler: handler.getAuthorById
+    handler: src/functions/author.getById
     layers:
       - {Ref: CommonLibsLambdaLayer}
     events:
@@ -57,7 +57,7 @@ functions:
           path: author/{authorId}
           method: get
   updateAuthor:
-    handler: handler.updateAuthor
+    handler: src/functions/author.update
     layers:
       - {Ref: CommonLibsLambdaLayer}
     events:
@@ -65,7 +65,7 @@ functions:
           path: author/{authorId}
           method: put
   deleteAuthor:
-    handler: handler.deleteAuthor
+    handler: src/functions/author.delete
     layers:
       - {Ref: CommonLibsLambdaLayer}
     events:
@@ -73,7 +73,7 @@ functions:
           path: author/{authorId}
           method: delete
   createPublication:
-    handler: handler.createPublication
+    handler: src/functions/publication.create
     layers:
       - {Ref: CommonLibsLambdaLayer}
     events:
@@ -81,7 +81,7 @@ functions:
           path: publication
           method: post
   getAllPublications:
-    handler: handler.getAllPublications
+    handler: src/functions/publication.getAll
     layers:
       - {Ref: CommonLibsLambdaLayer}
     events:
@@ -89,7 +89,7 @@ functions:
           path: publication
           method: get
   getPublicationById:
-    handler: handler.getPublicationById
+    handler: src/functions/publication.getById
     layers:
       - {Ref: CommonLibsLambdaLayer}
     events:
@@ -97,7 +97,7 @@ functions:
           path: publication/{publicationId}
           method: get
   updatePublication:
-    handler: handler.updatePublication
+    handler: src/functions/publication.update
     layers:
       - {Ref: CommonLibsLambdaLayer}
     events:
@@ -105,7 +105,7 @@ functions:
           path: publication/{publicationId}
           method: put
   deletePublication:
-    handler: handler.deletePublication
+    handler: src/functions/publication.delete
     layers:
       - {Ref: CommonLibsLambdaLayer}
     events:
