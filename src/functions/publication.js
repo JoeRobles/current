@@ -201,6 +201,42 @@ module.exports.getByAuthorId = async (event, context, callback) => {
   }
 };
 
+module.exports.getByTitle = async (event, context, callback) => {
+  if (event && event.pathParameters) {
+    const {title} = event.pathParameters;
+
+    if (
+      !title ||
+      title.trim() === ''
+    ) {
+      return callback(
+        null,
+        response(400, {
+          error: 'Get must have a title, and must not be empty'
+        })
+      );
+    }
+    const params = {
+      TableName,
+      Key: {
+        title
+      }
+    };
+
+    return db.get(params)
+      .promise()
+      .then(res => callback(null, response(200, res)))
+      .catch(err => callback(null, response(err.statusCode, err)));
+  } else {
+    return callback(
+      null,
+      response(400, {
+        error: 'Get must have a non empty publicationId parameter'
+      })
+    );
+  }
+};
+
 module.exports.update = async (event, context, callback) => {
   if (event && event.pathParameters && event.body) {
     const {publicationId} = event.pathParameters,

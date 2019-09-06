@@ -112,6 +112,14 @@ functions:
       - http:
           path: publication/author/{authorId}
           method: get
+  getPublicationByTitle:
+    handler: src/functions/publication.getByTitle
+    layers:
+      - {Ref: CommonLibsLambdaLayer}
+    events:
+      - http:
+          path: publication/title/{title}
+          method: get
   updatePublication:
     handler: src/functions/publication.update
     layers:
