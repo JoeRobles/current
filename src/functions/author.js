@@ -62,13 +62,11 @@ module.exports.getAll = async (event, context, callback) => {
   };
   return db.scan(params)
     .promise()
-    .then(res => {
-      callback(null, response(200, res))
-    })
+    .then(res => callback(null, response(200, res)))
     .catch(err => callback(null, response(err.statusCode, err)));
 };
 
-module.exports.getAuthorById = async (event, context, callback) => {
+module.exports.getById = async (event, context, callback) => {
   if (event && event.pathParameters) {
     const {authorId} = event.pathParameters;
 
@@ -92,9 +90,7 @@ module.exports.getAuthorById = async (event, context, callback) => {
 
     return db.get(params)
       .promise()
-      .then(res => {
-        callback(null, response(200, res))
-      })
+      .then(res => callback(null, response(200, res)))
       .catch(err => callback(null, response(err.statusCode, err)));
   } else {
     return callback(
@@ -147,9 +143,7 @@ module.exports.update = async (event, context, callback) => {
 
     return db.update(params)
       .promise()
-      .then(res => {
-        callback(null, response(200, res.Attributes))
-      })
+      .then(res => callback(null, response(200, res.Attributes)))
       .catch(err => callback(null, response(err.statusCode, err)));
   } else {
     return callback(
@@ -185,9 +179,7 @@ module.exports.delete = async (event, context, callback) => {
 
     return db.delete(params)
       .promise()
-      .then(res => {
-        callback(null, response(200, {message: 'Author deleted successfully'}))
-      })
+      .then(res => callback(null, response(200, {message: 'Author deleted successfully'})))
       .catch(err => callback(null, response(err.statusCode, err)));
   } else {
     return callback(

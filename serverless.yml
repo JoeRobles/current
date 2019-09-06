@@ -88,6 +88,14 @@ functions:
       - http:
           path: publication
           method: get
+  getAllOrderedPublications:
+    handler: src/functions/publication.getAllOrdered
+    layers:
+      - {Ref: CommonLibsLambdaLayer}
+    events:
+      - http:
+          path: publication/order/{order}
+          method: get
   getPublicationById:
     handler: src/functions/publication.getById
     layers:
@@ -95,6 +103,14 @@ functions:
     events:
       - http:
           path: publication/{publicationId}
+          method: get
+  getPublicationByAuthorId:
+    handler: src/functions/publication.getByAuthorId
+    layers:
+      - {Ref: CommonLibsLambdaLayer}
+    events:
+      - http:
+          path: publication/author/{authorId}
           method: get
   updatePublication:
     handler: src/functions/publication.update
