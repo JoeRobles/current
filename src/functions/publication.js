@@ -7,12 +7,16 @@ const AWS = require('aws-sdk'),
 
 const response = (statusCode, message) => ({
   statusCode,
+  headers: {
+    'Access-Control-Allow-Origin': '*',
+    'Access-Control-Allow-Credentials': true,
+  },
   body: JSON.stringify(message, null, 2)
 });
 
 module.exports.create = async (event, context, callback) => {
   if (event && event.body) {
-    const {title, body, publicationDate, authors} = JSON.parse(event.body);
+    const {title, body, publicationDate, authorId} = JSON.parse(event.body);
     if (
       !title ||
       title.trim() === '' ||
@@ -20,13 +24,13 @@ module.exports.create = async (event, context, callback) => {
       body.trim() === '' ||
       !publicationDate ||
       publicationDate.trim() === '' ||
-      !authors ||
-      authors.length === 0
+      !authorId ||
+      authorId.trim() === ''
     ) {
       return callback(
         null,
         response(400, {
-          error: 'Put must have a title, a body, a publicationDate and authors, and they must not be empty'
+          error: 'Put must have a title, a body, a publicationDate and authorId, and they must not be empty'
         })
       );
     }
@@ -36,7 +40,7 @@ module.exports.create = async (event, context, callback) => {
       title,
       body,
       publicationDate,
-      authors,
+      authorId,
       createdAt: new Date().toISOString(),
     };
     const params = {
@@ -95,19 +99,19 @@ module.exports.getAllOrdered = async (event, context, callback) => {
         const ascDesc = order ? (order === 'asc' ? sortByPublicationDateAsc : sortByPublicationDateDesc) : sortByPublicationDateAsc,
           resItems = res.Items.map(item => ({
             ...item,
-            authors: item.authors.map(async authorId => {
+            author: (item) => {
               const params = {
                 TableName: AuthorTableName,
                 Key: {
-                  authorId
+                  authorId: item.authorId
                 }
               };
 
-              return await db.get(params)
+              return db.get(params)
                 .promise()
-                .then(resp => callback(null, response(200, resp)))
+                .then(resp => callback(null, response(200, resp.Item)))
                 .catch(err => callback(null, response(err.statusCode, err)));
-            })
+            }
           }));
         const items = {
           ...res,

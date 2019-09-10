@@ -40,6 +40,7 @@ functions:
       - http:
           path: author
           method: post
+          cors: true
   getAllAuthors:
     handler: src/functions/author.getAll
     layers:
@@ -48,6 +49,7 @@ functions:
       - http:
           path: author
           method: get
+          cors: true
   getAuthorById:
     handler: src/functions/author.getById
     layers:
@@ -56,6 +58,7 @@ functions:
       - http:
           path: author/{authorId}
           method: get
+          cors: true
   updateAuthor:
     handler: src/functions/author.update
     layers:
@@ -64,6 +67,7 @@ functions:
       - http:
           path: author/{authorId}
           method: put
+          cors: true
   deleteAuthor:
     handler: src/functions/author.delete
     layers:
@@ -72,6 +76,7 @@ functions:
       - http:
           path: author/{authorId}
           method: delete
+          cors: true
   createPublication:
     handler: src/functions/publication.create
     layers:
@@ -80,6 +85,7 @@ functions:
       - http:
           path: publication
           method: post
+          cors: true
   getAllPublications:
     handler: src/functions/publication.getAll
     layers:
@@ -88,6 +94,7 @@ functions:
       - http:
           path: publication
           method: get
+          cors: true
   getAllOrderedPublications:
     handler: src/functions/publication.getAllOrdered
     layers:
@@ -96,6 +103,7 @@ functions:
       - http:
           path: publication/order/{order}
           method: get
+          cors: true
   getPublicationById:
     handler: src/functions/publication.getById
     layers:
@@ -104,6 +112,7 @@ functions:
       - http:
           path: publication/{publicationId}
           method: get
+          cors: true
   getPublicationByAuthorId:
     handler: src/functions/publication.getByAuthorId
     layers:
@@ -112,6 +121,7 @@ functions:
       - http:
           path: publication/author/{authorId}
           method: get
+          cors: true
   getPublicationByTitle:
     handler: src/functions/publication.getByTitle
     layers:
@@ -120,6 +130,7 @@ functions:
       - http:
           path: publication/title/{title}
           method: get
+          cors: true
   updatePublication:
     handler: src/functions/publication.update
     layers:
@@ -128,6 +139,7 @@ functions:
       - http:
           path: publication/{publicationId}
           method: put
+          cors: true
   deletePublication:
     handler: src/functions/publication.delete
     layers:
@@ -136,6 +148,7 @@ functions:
       - http:
           path: publication/{publicationId}
           method: delete
+          cors: true
 
 resources:
   Resources:

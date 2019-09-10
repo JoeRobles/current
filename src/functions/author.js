@@ -6,6 +6,10 @@ const AWS = require('aws-sdk'),
 
 const response = (statusCode, message) => ({
   statusCode,
+  headers: {
+    'Access-Control-Allow-Origin': '*',
+    'Access-Control-Allow-Credentials': true,
+  },
   body: JSON.stringify(message, null, 2)
 });
 
