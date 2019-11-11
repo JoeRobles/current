@@ -187,7 +187,7 @@ module.exports.getByAuthorId = async (event, context, callback) => {
     return await db.scan(params)
       .promise()
       .then(res => {
-        const Items = res.Items.filter(item => item.authors.indexOf(authorId) > -1),
+        const Items = res.Items.filter(item => item.authorId === authorId),
         items = {
           ...res,
           Items
@@ -227,9 +227,16 @@ module.exports.getByTitle = async (event, context, callback) => {
       }
     };
 
-    return db.get(params)
+    return await db.get(params)
       .promise()
-      .then(res => callback(null, response(200, res)))
+      .then(res => {
+        const Items = res.Items.filter(item => item.publicationTitle.indexOf(title) > -1),
+        items = {
+          ...res,
+          Items
+        };
+        callback(null, response(200, items))
+      })
       .catch(err => callback(null, response(err.statusCode, err)));
   } else {
     return callback(
